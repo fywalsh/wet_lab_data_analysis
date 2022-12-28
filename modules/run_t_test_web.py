@@ -84,11 +84,23 @@ def perform_t_tests(group_data, group_1_name, group_2_name):
 
     dfs = (
         run_test(df_group_data, col_name, group_1_name, group_2_name)
-        for (col_name, col_value) in df_group_data.iteritems()
+        for (col_name, col_value) in df_group_data.items()
     )
 
     st.header(group_1_name.upper() + " vs " + group_2_name.upper())
-    st.dataframe(pd.concat(dfs))
+
+    total_df = pd.concat(dfs)
+    st.dataframe(total_df)
+
+    st.download_button(
+        label="Download data as CSV",
+        data=convert_df_to_csv(total_df),
+        file_name=group_1_name.lower()
+        + "-vs-"
+        + group_2_name.lower()
+        + "-unpaired-t-test-results.csv",
+        mime="text/csvs",
+    )
 
 
 def run_test(df_group_data, col_name, group_1_name, group_2_name):
@@ -105,8 +117,8 @@ def run_test(df_group_data, col_name, group_1_name, group_2_name):
     """
     df_result = pd.DataFrame()
     if col_name != "Group-Name" and col_name != "Sample-Name":
-        # Copy data for the current attribute (e.g., Heart rate (bpm)) to two separate dataframes (one for each
-        # group)
+        # Copy data for the current attribute (e.g., Heart rate (bpm)) to two separate dataframes
+        # (one for each group)
         group_one = df_group_data.loc[
             df_group_data["Group-Name"] == group_1_name, col_name
         ].to_numpy()
@@ -164,3 +176,16 @@ def run_test(df_group_data, col_name, group_1_name, group_2_name):
             )
 
     return df_result
+
+
+@st.cache
+def convert_df_to_csv(df_to_convert):
+    """
+
+    Args:
+        df:
+
+    Returns:
+
+    """
+    return df_to_convert.to_csv().encode("utf-8")

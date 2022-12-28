@@ -43,15 +43,12 @@ with st.sidebar.form(key="input_form"):
 
 # Separate flag is needed to ensure the results are printed in the main screen
 if RUN_T_TEST:
+
     if len(group_1_name) == 0 or len(group_2_name) == 0:
         st.error(
             "You must enter names for both groups before running the t-test!", icon="🚨"
         )
-    elif len(uploaded_files_1) == 0 or len(uploaded_files_2) == 0:
-        st.error(
-            "You must upload files for both groups before running the t-test!", icon="🚨"
-        )
-    elif 0 > len(uploaded_files_1) < 2 or 0 > len(uploaded_files_2) < 2:
+    elif not uploaded_files_1 or not uploaded_files_2:
         st.error(
             "You must upload files for both groups before running the t-test!", icon="🚨"
         )
