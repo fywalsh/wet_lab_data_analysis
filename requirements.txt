@@ -3,4 +3,3 @@ pandas
 numpy
 pingouin
 xlrd
-openpyxl

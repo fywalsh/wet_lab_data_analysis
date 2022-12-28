@@ -47,11 +47,11 @@ if RUN_T_TEST:
         st.error(
             "You must enter names for both groups before running the t-test!", icon="🚨"
         )
-    elif len(str(uploaded_files_1)) == 0 or len(str(uploaded_files_2)) == 0:
+    elif len(uploaded_files_1) == 0 or len(uploaded_files_2) == 0:
         st.error(
             "You must upload files for both groups before running the t-test!", icon="🚨"
         )
-    elif 0 > len(str(uploaded_files_1)) < 2 or 0 > len(str(uploaded_files_2)) < 2:
+    elif 0 > len(uploaded_files_1) < 2 or 0 > len(uploaded_files_2) < 2:
         st.error(
             "You must upload files for both groups before running the t-test!", icon="🚨"
         )
