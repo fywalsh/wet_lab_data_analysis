@@ -29,8 +29,8 @@ def load_files(groups):
 
     count = 0
     for group in groups.split(","):
-        for file in glob.glob(os.path.join(args.input_dir + "\\" + group, "*.xls")):
-            print("Reading Excel File: {}".format(file))
+        for file in glob.glob(os.path.join(args.input_dir + "\\" + group, "*.xlsx")):
+            print(f"Reading Excel File: {file}")
             group_data_for_analysis[count] = read_data(file, group)
             count += 1
 
@@ -91,7 +91,7 @@ def perform_t_tests(group_data, group_names):
 
     start_row = 0
     current_date_time = time.strftime("%d%m%Y_%H%M")
-    for (col_name, col_value) in df_group_data.iteritems():
+    for col_name in df_group_data.iteritems():
         if col_name != "Group-Name" and col_name != "Sample-Name":
             # Copy data for the current attribute (e.g., Heart rate (bpm)) to two separate dataframes (one for each
             # group)
@@ -105,7 +105,7 @@ def perform_t_tests(group_data, group_names):
             # Perform the t-test if at least one of the arrays has non-zero data
             if np.any(group_one != 0) or np.any(group_two != 0):
                 # Conduct two-sample t-test
-                df_result = pg.ttest(group_one, group_two, correction=False)
+                df_result = pg.ttest(group_one, group_two, correction=False)  # type: ignore
                 df_result.insert(loc=0, column="", value=col_name)
 
                 # Check if the p-val is significantly different
@@ -157,23 +157,25 @@ def perform_t_tests(group_data, group_names):
                 + ".xlsx"
             )
             if os.path.exists(results_file):
-                with pd.ExcelWriter(
-                    results_file, mode="a", engine="openpyxl", if_sheet_exists="overlay"
-                ) as writer:
-                    df_result.to_excel(writer, sheet_name="Sheet1", startrow=start_row)
+                open_mode = "a"
             else:
-                with pd.ExcelWriter(
-                    results_file, mode="w", engine="openpyxl"
-                ) as writer:
-                    df_result.to_excel(writer, sheet_name="Sheet1", startrow=start_row)
+                open_mode = "w"
+
+            with pd.ExcelWriter(
+                results_file,
+                mode=open_mode,
+                engine="openpyxl",
+                if_sheet_exists="overlay",
+            ) as writer:
+                df_result.to_excel(writer, sheet_name="Sheet1", startrow=start_row)
 
             start_row += 2
 
-    print("T-Test results saved to {}".format(results_file))
+    print(f"T-Test results saved to {results_file}")
 
 
 if __name__ == "__main__":
-    print("Running Script: {}".format(__file__))
+    print(f"Running Script: {__file__}")
 
     parser = argparse.ArgumentParser(
         prog=__file__, usage="%(prog)s [options]", description="Performs Data Analysis"

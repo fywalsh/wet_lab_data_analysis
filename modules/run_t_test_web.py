@@ -52,10 +52,12 @@ def read_data(filename, group_name):
 
     # Drop 'Loop Number' column
     df_data.drop(labels="Loop Number", axis=1, inplace=True)
+
     # Drop last 4 rows
     df_data.drop(
         labels=range(df_data.shape[0] - 4, df_data.shape[0]), axis=0, inplace=True
     )
+
     # Calculate the mean value of all columns, add a row and place them in it
     df_data.loc[df_data.shape[0]] = df_data.mean()
 
@@ -84,11 +86,22 @@ def perform_t_tests(group_data, group_1_name, group_2_name):
 
     dfs = (
         run_test(df_group_data, col_name, group_1_name, group_2_name)
-        for (col_name, col_value) in df_group_data.iteritems()
+        for (col_name, col_value) in df_group_data.items()
     )
 
     st.header(group_1_name.upper() + " vs " + group_2_name.upper())
-    st.dataframe(pd.concat(dfs))
+
+    total_df = pd.concat(dfs)
+    st.dataframe(total_df)
+    st.download_button(
+        label="Download data as CSV",
+        data=total_df.to_csv().encode("utf-8"),
+        file_name=group_1_name.lower()
+        + "-vs-"
+        + group_2_name.lower()
+        + "-unpaired-t-test-results.csv",
+        mime="text/csvs",
+    )
 
 
 def run_test(df_group_data, col_name, group_1_name, group_2_name):
@@ -105,8 +118,8 @@ def run_test(df_group_data, col_name, group_1_name, group_2_name):
     """
     df_result = pd.DataFrame()
     if col_name != "Group-Name" and col_name != "Sample-Name":
-        # Copy data for the current attribute (e.g., Heart rate (bpm)) to two separate dataframes (one for each
-        # group)
+        # Copy data for the current attribute (e.g., Heart rate (bpm)) to two separate dataframes
+        # (one for each group)
         group_one = df_group_data.loc[
             df_group_data["Group-Name"] == group_1_name, col_name
         ].to_numpy()
