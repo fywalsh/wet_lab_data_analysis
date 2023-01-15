@@ -6,7 +6,7 @@ ___
 
 ## Installation (*Command Line Tool Only*)
 
-Use the package manager <a href="https://pip.pypa.io/en/stable/" target="_blank" rel="noopener noreferrer">pip</a> to install requirements.txt.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install requirements.txt.
 
 ```bash
 pip install -r requirements.txt
@@ -18,7 +18,7 @@ ___
 The tool can be run as a web application (already deployed on the **Streamlit Platform**) or via the Command Line.
 
 ### Web Application
-To use the web application, click  <a href="https://fywalsh-wet-lab-data-analysis-t-test-frontend-ngpzd4.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a>  and perform the following:
+To use the web application, click  [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://fywalsh-wet-lab-data-analysis-t-test-frontend-ngpzd4.streamlit.app/)  and perform the following:
 * Type a group name (e.g., WildType) for Group 1.
 * Upload all files for Group 1 (e.g., *WT#1.xlsx, WT#2.xlsx, WT#3.xlsx*)) for Group 1.
 * Type a group name (e.g., Transgenic) for Group 2.
