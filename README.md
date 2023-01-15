@@ -6,7 +6,7 @@ ___
 
 ## Installation (*Command Line Tool Only*)
 
-Use the package manager <a href="https://pip.pypa.io/en/stable/" target="_blank">pip</a> to install requirements.txt.
+Use the package manager <a href="https://pip.pypa.io/en/stable/" target="_blank" rel="noopener noreferrer">pip</a> to install requirements.txt.
 
 ```bash
 pip install -r requirements.txt
@@ -20,9 +20,9 @@ The tool can be run as a web application (already deployed on the **Streamlit Pl
 ### Web Application
 To use the web application, click  <a href="https://fywalsh-wet-lab-data-analysis-t-test-frontend-ngpzd4.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a>  and perform the following:
 * Type a group name (e.g., WildType) for Group 1.
-* Upload all files for Group 1 (e.g., [WT#1.xlsx](test_files/WT%231.xlsx), [WT#2.xlsx](test_files/WT%232.xlsx), [WT#3.xlsx](test_files/WT%233.xlsx)) for Group 1.
+* Upload all files for Group 1 (e.g., *WT#1.xlsx, WT#2.xlsx, WT#3.xlsx*)) for Group 1.
 * Type a group name (e.g., Transgenic) for Group 2.
-* Upload all files for Group 2 (e.g., [TG#1.xlsx](test_files/TG%231.xlsx), [TG#2.xlsx](test_files/TG%231.xlsx), [TG#3.xlsx](test_files/TG%233.xlsx)) for Group 2.
+* Upload all files for Group 2 (e.g., *TG#1.xlsx, TG#2.xlsx, TG#3.xlsx*) for Group 2.
 * Click **Run Unpaired *t* test**.
 	* A bar chart comparing the *p-val* for each measurement will appear, to expand it hover over it and a set of arrows will appear on the right - click to expand.  Click on the same arrows to return to the original view.
 	* A table showing raw results from the test will also appear (expand in the same manner as above).  These results can be download as a CSV by clicking on the download button.  *Note: that clicking on the button will cause the results to disappear from screen - this is due to Streamlit rerunning the whole application when it receives any input - click on **Run Unpaired *t* test** to reload the results.*
