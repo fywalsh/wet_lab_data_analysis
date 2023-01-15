@@ -1,4 +1,5 @@
-""" This script does x."""
+""" This script performs a Unpaired, two-sample student's t test on a set of
+measurements provided using input files."""
 
 import numpy as np
 import pandas as pd
@@ -84,16 +85,20 @@ def perform_t_tests(group_data, group_1_name, group_2_name):
 
     dfs = (
         run_test(df_group_data, col_name, group_1_name, group_2_name)
-        for (col_name, col_value) in df_group_data.items()
+        for (col_name, _) in df_group_data.items()
     )
 
     st.header(group_1_name.upper() + " vs " + group_2_name.upper())
 
     total_df = pd.concat(dfs)
-    st.dataframe(total_df)
+
+    st.bar_chart(total_df, x="Measurement", y="p-val")
+
+    st.subheader("Results")
+    st.dataframe(total_df.sort_values(by=["Measurement"]))
 
     st.download_button(
-        label="Download data as CSV",
+        label="**Download data as CSV**",
         data=convert_df_to_csv(total_df),
         file_name=group_1_name.lower()
         + "-vs-"
@@ -117,7 +122,7 @@ def run_test(df_group_data, col_name, group_1_name, group_2_name):
     """
     df_result = pd.DataFrame()
     if col_name != "Group-Name" and col_name != "Sample-Name":
-        # Copy data for the current attribute (e.g., Heart rate (bpm)) to two separate dataframes
+        # Copy data for the current measurement (e.g., Heart rate (bpm)) to two separate dataframes
         # (one for each group)
         group_one = df_group_data.loc[
             df_group_data["Group-Name"] == group_1_name, col_name
@@ -131,7 +136,7 @@ def run_test(df_group_data, col_name, group_1_name, group_2_name):
             # Conduct two-sample t-test
             try:
                 df_result = pg.ttest(group_one, group_two, correction=False)
-                df_result.insert(loc=0, column="", value=col_name)
+                df_result.insert(loc=0, column="Measurement", value=col_name)
 
                 # Check if the p-val is significantly different
                 df_result.loc[
@@ -149,7 +154,7 @@ def run_test(df_group_data, col_name, group_1_name, group_2_name):
             # Create a blank dataframe for
             df_result = pd.DataFrame(
                 data={
-                    "": col_name,
+                    "Measurement": col_name,
                     "T": 0.0,
                     "dof": 0,
                     "alternative": "two-sided",
@@ -162,7 +167,7 @@ def run_test(df_group_data, col_name, group_1_name, group_2_name):
                 },
                 index=["T-test"],
                 columns=[
-                    "",
+                    "Measurement",
                     "T",
                     "dof",
                     "alternative",

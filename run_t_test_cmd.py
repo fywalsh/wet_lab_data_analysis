@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+""" This script performs a Unpaired, two-sample student's t test on a
+set of measurements provided using input files."""
 
 # Built-in Libraries
 import argparse
@@ -17,19 +18,19 @@ warnings.simplefilter("error", RuntimeWarning)
 
 def load_files(groups):
     """
-    Loads Excel files with group data
+    Loads Excel files with group dataF
 
-    Args:
-        groups:
+        Args:
+            groups:
 
-    Returns:
+        Returns:
 
     """
     group_data_for_analysis = {}
 
     count = 0
     for group in groups.split(","):
-        for file in glob.glob(os.path.join(args.input_dir + "\\" + group, "*.xls")):
+        for file in glob.glob(os.path.join(args.input_dir + "\\" + group, "*.xlsx")):
             print(f"Reading Excel File: {file}")
             group_data_for_analysis[count] = read_data(file, group)
             count += 1
@@ -57,7 +58,9 @@ def read_data(filename, group_name):
     df_data.drop(labels="Loop Number", axis=1, inplace=True)
     # Drop last 4 rows
     df_data.drop(
-        labels=range(df_data.shape[0] - 4, df_data.shape[0]), axis=0, inplace=True
+        labels=range(df_data.shape[0] - 4, df_data.shape[0]),
+        axis=0,
+        inplace=True,
     )
     # Calculate the mean value of all columns, add a row and place them in it
     df_data.loc[df_data.shape[0]] = df_data.mean()
@@ -89,17 +92,34 @@ def perform_t_tests(group_data, group_names):
 
     print("Running T-Tests......")
 
+    # Create Results file
+    results_file = (
+        args.output_dir
+        + "\\"
+        + group_names.split(",")[0]
+        + "_vs_"
+        + group_names.split(",")[1]
+        + "_"
+        + time.strftime("%d%m%Y_%H%M")
+        + ".xlsx"
+    )
+    writer = pd.ExcelWriter(results_file, engine="openpyxl")
+
+    group_1 = group_names.split(",")[0]
+    group_2 = group_names.split(",")[1]
+
     start_row = 0
-    current_date_time = time.strftime("%d%m%Y_%H%M")
-    for col_name in df_group_data.iteritems():
+    for (col_name, _) in df_group_data.items():
         if col_name != "Group-Name" and col_name != "Sample-Name":
-            # Copy data for the current attribute (e.g., Heart rate (bpm)) to two separate dataframes (one for each
-            # group)
+            # Copy data for the current attribute (e.g., Heart rate (bpm)) to two
+            # separate dataframes (one for each group)
             group_one = df_group_data.loc[
-                df_group_data["Group-Name"] == group_names.split(",")[0], col_name
+                df_group_data["Group-Name"] == group_1,
+                col_name,
             ].to_numpy()
             group_two = df_group_data.loc[
-                df_group_data["Group-Name"] == group_names.split(",")[1], col_name
+                df_group_data["Group-Name"] == group_2,
+                col_name,
             ].to_numpy()
 
             # Perform the t-test if at least one of the arrays has non-zero data
@@ -110,10 +130,12 @@ def perform_t_tests(group_data, group_names):
 
                 # Check if the p-val is significantly different
                 df_result.loc[
-                    df_result["p-val"] < 0.05, "Significantly Different (P < 0.05)?"
+                    df_result["p-val"] < 0.05,
+                    "Significantly Different (P < 0.05)?",
                 ] = "Yes"
                 df_result.loc[
-                    df_result["p-val"] >= 0.05, "Significantly Different (P < 0.05)?"
+                    df_result["p-val"] >= 0.05,
+                    "Significantly Different (P < 0.05)?",
                 ] = "No"
             else:
                 # Create a blank dataframe for
@@ -128,7 +150,7 @@ def perform_t_tests(group_data, group_names):
                         "cohen-d": 0.0,
                         "BF10": 0.0,
                         "power": 0.0,
-                        "Significantly Different (P " "< 0.05)?": "No",
+                        "Significantly Different (P < 0.05)?": "No",
                     },
                     index=["T-test"],
                     columns=[
@@ -145,31 +167,11 @@ def perform_t_tests(group_data, group_names):
                     ],
                 )
 
-            # Print the result to Excel
-            results_file = (
-                args.input_dir
-                + "\\"
-                + group_names.split(",")[0]
-                + "_vs_"
-                + group_names.split(",")[1]
-                + "_"
-                + current_date_time
-                + ".xlsx"
-            )
-            if os.path.exists(results_file):
-                open_mode = "a"
-            else:
-                open_mode = "w"
-
-            with pd.ExcelWriter(
-                results_file,
-                mode=open_mode,
-                engine="openpyxl",
-                if_sheet_exists="overlay",
-            ) as writer:
-                df_result.to_excel(writer, sheet_name="Sheet1", startrow=start_row)
+            df_result.to_excel(writer, sheet_name="Sheet1", startrow=start_row)
 
             start_row += 2
+
+    writer.close()
 
     print(f"T-Test results saved to {results_file}")
 
@@ -178,11 +180,14 @@ if __name__ == "__main__":
     print(f"Running Script: {__file__}")
 
     parser = argparse.ArgumentParser(
-        prog=__file__, usage="%(prog)s [options]", description="Performs Data Analysis"
+        prog=__file__,
+        usage="%(prog)s [options]",
+        description="Performs Data Analysis",
     )
 
     # -i input_dir -g group_list
     parser.add_argument("-i", "--input_dir", help="Input directory")
+    parser.add_argument("-o", "--output_dir", help="Output directory")
     parser.add_argument("-g", "--group_list", help="Comma separated list of groups")
 
     args = parser.parse_args()

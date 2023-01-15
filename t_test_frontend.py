@@ -1,44 +1,51 @@
+""" This is the frontend script for the Unpaired, two-sample student's t test."""
+
 import streamlit as st
+from PIL import Image
 from modules import run_t_test_web
 
 RUN_T_TEST = False
 
-with st.sidebar.form(key="input_form"):
+st.set_page_config(layout="wide")
 
-    st.info(
-        "Enter a name and upload files for each group above and click 'Run Unpaired t test'",
-        icon="ℹ️",
-    )
+image = Image.open("logo.png")
+st.image(image, width=300)
+
+st.title("Unpaired, two-sample student's *t* test")
+
+with st.form(key="input_form"):
+
+    col1, col2 = st.columns(2)
 
     # Group 1
-    st.header("**:red[Group 1 Name]**")
-    group_1_name = st.text_input(
-        label="**:red[Group 1 Name]**",
-        placeholder="WildType",
-        label_visibility="collapsed",
-    )
-    st.subheader("**:red[Upload files for Group 1]**")
-    uploaded_files_1 = st.file_uploader(
-        label="**:red[Upload files for Group 1]**",
-        accept_multiple_files=True,
-        label_visibility="collapsed",
-    )
+    with col1:
+        st.write("**:red[Group 1 Name]**")
+        group_1_name = st.text_input(
+            label="**:red[Group 1 Name]**",
+            label_visibility="collapsed",
+        )
+        st.write("**:red[Upload files for Group 1]**")
+        uploaded_files_1 = st.file_uploader(
+            label="**:red[Upload files for Group 1]**",
+            accept_multiple_files=True,
+            label_visibility="collapsed",
+        )
 
     # Group 2
-    st.header("**:blue[Group 2 Name]**")
-    group_2_name = st.text_input(
-        label="**:blue[Group 2 Name]**",
-        placeholder="Transgenic",
-        label_visibility="collapsed",
-    )
-    st.subheader("**:blue[Upload files for Group 2]**")
-    uploaded_files_2 = st.file_uploader(
-        label="**:blue[Upload files for Group 2]**",
-        accept_multiple_files=True,
-        label_visibility="collapsed",
-    )
+    with col2:
+        st.write("**:blue[Group 2 Name]**")
+        group_2_name = st.text_input(
+            label="**:blue[Group 2 Name]**",
+            label_visibility="collapsed",
+        )
+        st.write("**:blue[Upload files for Group 2]**")
+        uploaded_files_2 = st.file_uploader(
+            label="**:blue[Upload files for Group 2]**",
+            accept_multiple_files=True,
+            label_visibility="collapsed",
+        )
 
-    if st.form_submit_button(label="**Run Unpaired t test**"):
+    if st.form_submit_button(label="**Run Unpaired *t* test**"):
         RUN_T_TEST = True
 
 # Separate flag is needed to ensure the results are printed in the main screen
