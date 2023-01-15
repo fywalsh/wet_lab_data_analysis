@@ -1,6 +1,7 @@
 # Automated *t* test calculation tool for Pressure-Volume Loop (PVL) data #
 
 Python tool to perform an unpaired, two-sample student's *t* test on the mean values of Pressure-Volume Loop measurements (e.g., Heart rate (bpm), End-diastolic Volume (µL), Cardiac Output (µL/min)) for two groups (e.g., WildType vs Transgenic).  Note: this tool has been designed to ingest Excel files with a specific format produced by a specific wet lab software (i.e., PVAN Ultra).  See [here](test_files/) for examples of the input files.  
+
 ___
 
 ## Installation (*Command Line Tool Only*)
@@ -11,6 +12,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install require
 pip install -r requirements.txt
 ```
 ___
+
 ## Usage
 
 The tool can be run as a web application (already deployed on the **Streamlit Platform**) or via the Command Line.
@@ -42,13 +44,9 @@ To use the command line tool, perform the following:
 * Run the following command (on the command line):
 	```bash
 	python run_t_test_cmd.py -i <input_dir> -o <output_dir> -g <group1,group2>
-
-	**Example:** python run_t_test_cmd.py -i C:\data -o C:\results -g Transgenic,WildType
+	```
+	**Example:** 
+	```bash
+	python run_t_test_cmd.py -i C:\data -o C:\results -g Transgenic,WildType
 	```
 * The results will be saved to an Excel file named *Group1_vs_Group2_DDMMYYYY_HHMI.xlsx* in the output directory.
-
-___
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
