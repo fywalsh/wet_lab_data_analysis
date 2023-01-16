@@ -1,4 +1,4 @@
-# Automated *t* test calculation tool for Pressure-Volume Loop (PVL) data #
+# *t* test calculation tool for Pressure-Volume Loop (PVL) data #
 
 Python tool to perform an unpaired, two-sample student's *t* test on the mean values of Pressure-Volume Loop measurements (e.g., Heart rate (bpm), End-diastolic Volume (µL), Cardiac Output (µL/min)) for two groups (e.g., WildType vs Transgenic).  Note: this tool has been designed to ingest Excel files with a specific format produced by a specific wet lab software (i.e., PVAN Ultra).  See [here](test_files/) for examples of the input files.  
 
